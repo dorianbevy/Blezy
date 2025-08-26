@@ -5,6 +5,9 @@ import AdminPanelDB from "./src/components/AdminPanelDB.jsx";
 import BoulangerieSite from "./src/components/BoulangerieSite.jsx";
 import { getFormattedData } from "./src/services/api.js";
 //import TestComponent from "./src/components/TestComponent.jsx";
+import pain2Img from "./src/img/pain_2.jpg";
+import croissantImg from "./src/img/croissant.jpg";
+import pralineImg from "./src/img/praline.jpg";
 
 // Styles CSS personnalisés pour le carrousel
 const carouselStyles = `
@@ -76,7 +79,7 @@ function App() {
               { id: 2, n: "Campagne", d: "Blés anciens, fermentation lente" },
               { id: 3, n: "Seigle", d: "Goût soutenu, longue conservation" },
             ],
-            img: "./src/img/pain_2.jpg"
+            img: pain2Img
           },
           {
             id: 2,
@@ -85,7 +88,7 @@ function App() {
               { id: 4, n: "Croissant pur beurre", d: "Beurre AOP Charentes-Poitou" },
               { id: 5, n: "Pain au chocolat", d: "Deux bâtons, pâte feuilletée maison" },
             ],
-            img: "./src/img/croissant.jpg"
+            img: croissantImg
           },
           {
             id: 3,
@@ -94,7 +97,7 @@ function App() {
               { id: 6, n: "Pain du Beaujolais", d: "Farines locales, four à bois" },
               { id: 7, n: "Tarte aux pralines", d: "Spécialité régionale" },
             ],
-            img: "./src/img/praline.jpg"
+            img: pralineImg
           },
         ]);
       } finally {

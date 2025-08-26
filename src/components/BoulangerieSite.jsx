@@ -1,5 +1,13 @@
 import React from "react";
 import { MapPin, Phone, Clock, Wheat, ShoppingBag, Mail, Heart } from "lucide-react";
+import facadeImg from "../img/facade.webp";
+import painImg from "../img/pain.jpg";
+import patisserieImg from "../img/patisserie.jpg";
+import atelierImg from "../img/atelier.jpg";
+import vitrineImg from "../img/vitrine.jpg";
+import pain2Img from "../img/pain_2.jpg";
+import croissantImg from "../img/croissant.jpg";
+import pralineImg from "../img/praline.jpg";
 
 // Composant Divider réutilisable
 function Divider() {
@@ -31,21 +39,21 @@ const defaultProduits = [
             { n: "Campagne", d: "Blés anciens, fermentation lente" },
             { n: "Seigle", d: "Goût soutenu, longue conservation" },
         ],
-        img: "./src/img/pain_2.jpg"
+        img: pain2Img
     },
     {
         cat: "Viennoiseries", items: [
             { n: "Croissant pur beurre", d: "Beurre AOP Charentes-Poitou" },
             { n: "Pain au chocolat", d: "Deux bâtons, pâte feuilletée maison" },
         ],
-        img: "./src/img/croissant.jpg"
+        img: croissantImg
     },
     {
         cat: "Spécialités", items: [
             { n: "Pain du Beaujolais", d: "Farines locales, four à bois" },
             { n: "Tarte aux pralines", d: "Spécialité régionale" },
         ],
-        img: "./src/img/praline.jpg"
+        img: pralineImg
     },
 ];
 
@@ -121,7 +129,7 @@ export default function BoulangerieSite({ adminProducts }) {
     return (
         <div className="min-h-screen select-none">
             <div className="backdrop-brightness-95">
-                <div className="font-playfair font-semibold tracking-wider bg-fixed bg-cover bg-center h-[500px] relative flex flex-col" style={{ backgroundImage: "url('./src/img/vitrine.jpg')" }}>
+                <div className="font-playfair font-semibold tracking-wider bg-fixed bg-cover bg-center h-[500px] relative flex flex-col" style={{ backgroundImage: `url(${vitrineImg})` }}>
                     {/* Overlay dégradé pour améliorer la lisibilité */}
                     <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/40"></div>
 
@@ -186,17 +194,17 @@ export default function BoulangerieSite({ adminProducts }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <div className="group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02]">
                             <div className="aspect-[4/3] overflow-hidden">
-                                <img src="./src/img/facade.webp" alt="Façade de la boulangerie" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                                <img src={facadeImg} alt="Façade de la boulangerie" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
                             </div>
                         </div>
                         <div className="group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02]">
                             <div className="aspect-[4/3] overflow-hidden">
-                                <img src="./src/img/pain.jpg" alt="Pain" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                                <img src={painImg} alt="Pain" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
                             </div>
                         </div>
                         <div className="group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02]">
                             <div className="aspect-[4/3] overflow-hidden">
-                                <img src="./src/img/patisserie.jpg" alt="Patisserie" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                                <img src={patisserieImg} alt="Patisserie" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
                             </div>
                         </div>
                     </div>
@@ -231,7 +239,7 @@ export default function BoulangerieSite({ adminProducts }) {
                         {/* Image de l'atelier */}
                         <div className="aspect-[4/3] group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02]">
                             <div className="aspect-square overflow-hidden">
-                                <img src="./src/img/atelier.jpg" alt="Atelier de boulangerie" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                                <img src={atelierImg} alt="Atelier de boulangerie" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
                             </div>
                         </div>
 
