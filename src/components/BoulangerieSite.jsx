@@ -1,13 +1,25 @@
 import React from "react";
-import { MapPin, Phone, Clock, Wheat, ShoppingBag, Mail, Heart } from "lucide-react";
+import { MapPin, Phone, Clock, Wheat, ShoppingBag, Mail, Heart, Menu, X } from "lucide-react";
 import facadeImg from "../img/facade.webp";
-import painImg from "../img/pain.jpg";
-import patisserieImg from "../img/patisserie.jpg";
+import painImg from "../img/baguette.jpg";
+import patisserieImg from "../img/patisserie_3.jpg";
 import atelierImg from "../img/atelier.jpg";
 import vitrineImg from "../img/vitrine.jpg";
-import pain2Img from "../img/pain_2.jpg";
-import croissantImg from "../img/croissant.jpg";
+import pain2Img from "../img/pain_cereale_2.jpg";
+import croissantImg from "../img/viennoiserie_1.jpg";
+import viennoiserie3Img from "../img/viennoiserie_3.jpg";
 import pralineImg from "../img/praline.jpg";
+import flanImg from "../img/flan.jpg";
+import fraisierImg from "../img/fraisier.jpg";
+import gateauxImg from "../img/gateaux.jpg";
+import gateaux2Img from "../img/gateaux_2.jpg";
+import tartelettesImg from "../img/tartelettes.jpg";
+import saleImg from "../img/sale.jpg";
+import sandwichImg from "../img/sandwich.jpg";
+import painCerealeImg from "../img/pain_cereale_3.jpg";
+import brownieImg from "../img/brownie.jpg";
+import logoImg from "../img/logo.png";
+import logo2Img from "../img/logo_2.png";
 
 // Composant Divider réutilisable
 function Divider() {
@@ -36,22 +48,35 @@ const defaultProduits = [
     {
         cat: "Pains", items: [
             { n: "Baguette tradition", d: "Levain naturel, farine locale T65" },
-            { n: "Campagne", d: "Blés anciens, fermentation lente" },
-            { n: "Seigle", d: "Goût soutenu, longue conservation" },
+            { n: "Pain céréale", d: "Farines variées, graines" },
+            { n: "Pain de campagne", d: "Blés anciens, fermentation lente" },
+            { n: "Pain complet", d: "Richesse en fibres, goût authentique" },
         ],
         img: pain2Img
     },
     {
         cat: "Viennoiseries", items: [
             { n: "Croissant pur beurre", d: "Beurre AOP Charentes-Poitou" },
-            { n: "Pain au chocolat", d: "Deux bâtons, pâte feuilletée maison" },
+            { n: "Pain au chocolat maison", d: "Deux bâtons, pâte feuilletée maison" },
+            { n: "Madeleine artisanale", d: "Moelleuse, dorée" },
         ],
-        img: croissantImg
+        img: viennoiserie3Img
+    },
+    {
+        cat: "Pâtisseries", items: [
+            { n: "Flan", d: "Classique, crémeux" },
+            { n: "Fraisier", d: "Fraises fraîches, crème légère" },
+            { n: "Brownie", d: "Chocolat intense, noix" },
+            { n: "Tartelette", d: "Fruits frais de saison" },
+            { n: "Assortiment", d: "Gâteaux variés maison" },
+        ],
+        img: gateauxImg
     },
     {
         cat: "Spécialités", items: [
-            { n: "Pain du Beaujolais", d: "Farines locales, four à bois" },
             { n: "Tarte aux pralines", d: "Spécialité régionale" },
+            { n: "Gâteau aux noix", d: "Noix du voisin, moelleux gourmand" },
+            { n: "Vitrine salée", d: "Quiches, sandwichs, salés" },
         ],
         img: pralineImg
     },
@@ -62,6 +87,7 @@ export default function BoulangerieSite({ adminProducts }) {
     const today = new Date().toLocaleDateString("fr-FR", { weekday: "long" });
     const todayCap = today.charAt(0).toUpperCase() + today.slice(1);
     const [currentSlide, setCurrentSlide] = React.useState(0);
+    const [menuOpen, setMenuOpen] = React.useState(false);
 
     // Utiliser les produits admin s'ils sont disponibles, sinon les produits par défaut
     const produits = adminProducts || defaultProduits;
@@ -92,8 +118,14 @@ export default function BoulangerieSite({ adminProducts }) {
     const goToPrevious = () => {
         const carousel = document.getElementById('products-carousel');
         if (carousel) {
-            carousel.scrollBy({ left: -400, behavior: 'smooth' });
-            setCurrentSlide(prev => Math.max(0, prev - 1));
+            // Trouve la première card
+            const card = carousel.querySelector('div.group');
+            if (card) {
+                const cardStyle = window.getComputedStyle(card);
+                const gap = parseFloat(cardStyle.marginRight);
+                const width = card.offsetWidth + gap;
+                carousel.scrollBy({ left: -width, behavior: 'smooth' });
+            }
         }
     };
 
@@ -101,8 +133,16 @@ export default function BoulangerieSite({ adminProducts }) {
     const goToNext = () => {
         const carousel = document.getElementById('products-carousel');
         if (carousel) {
-            carousel.scrollBy({ left: 400, behavior: 'smooth' });
-            setCurrentSlide(prev => Math.min(Math.ceil(produits.length / 3) - 1, prev + 1));
+            const card = carousel.querySelector('div.group');
+            if (card) {
+                const cardStyle = window.getComputedStyle(card);
+                const gap = parseFloat(cardStyle.marginRight);
+                const width = card.offsetWidth + gap;
+                const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+                // Si déjà tout à droite ou qu'un pas de plus excède la fin
+                if (carousel.scrollLeft + width >= maxScrollLeft - 2) return;
+                carousel.scrollBy({ left: width, behavior: 'smooth' });
+            }
         }
     };
 
@@ -127,7 +167,7 @@ export default function BoulangerieSite({ adminProducts }) {
     }, [produits]);
 
     return (
-        <div className="min-h-screen select-none">
+        <div className="min-h-screen select-none overflow-x-hidden">
             <div className="backdrop-brightness-95">
                 <div className="font-playfair font-semibold tracking-wider bg-fixed bg-cover bg-center h-[500px] relative flex flex-col" style={{ backgroundImage: `url(${vitrineImg})` }}>
                     {/* Overlay dégradé pour améliorer la lisibilité */}
@@ -135,17 +175,18 @@ export default function BoulangerieSite({ adminProducts }) {
 
                     {/* Bandeau supérieur */}
                     <header className="border-b border-stone-300/30 relative z-10 backdrop-blur-sm bg-white/5">
-                        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-700 to-amber-900 grid place-items-center shadow-lg">
-                                    <Wheat className="w-5 h-5 text-amber-50" />
-                                </div>
+                        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between relative">
+                            {/* Logo à gauche */}
+                            <div className="flex items-center gap-3 z-[1]">
+                                <img src={logo2Img} alt="Blézy Boulangerie" className="w-14 h-14 object-cover" />
                                 <div>
                                     <div className="text-xl tracking-wide text-white font-bold">Blézy Boulangerie</div>
-                                    <div className="text-[12px] text-amber-100">Theizé – Val d'Oingt</div>
+                                    <div className="text-[12px] text-amber-100">Pouilly-le-Monial</div>
                                 </div>
                             </div>
-                            <nav className="md:flex items-center gap-6 text-base text-white">
+
+                            {/* Nav centre (desktop only) */}
+                            <nav className="absolute left-1/2 transform -translate-x-1/2 md:flex items-center gap-6 text-base text-white hidden">
                                 <button onClick={() => smoothScrollTo('maison')} className="relative group transition-all duration-300 ease-out hover:text-amber-100">
                                     <span>La maison</span>
                                     <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-amber-100 to-amber-200 transition-all duration-300 ease-out group-hover:w-full"></div>
@@ -154,23 +195,90 @@ export default function BoulangerieSite({ adminProducts }) {
                                     <span>Nos produits</span>
                                     <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-amber-100 to-amber-200 transition-all duration-300 ease-out group-hover:w-full"></div>
                                 </button>
-                                <button onClick={() => smoothScrollTo('savoirfaire')} className="relative group transition-all duration-300 ease-out hover:text-amber-100">
-                                    <span>Savoir‑faire</span>
-                                    <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-amber-100 to-amber-200 transition-all duration-300 ease-out group-hover:w-full"></div>
-                                </button>
                                 <button onClick={() => smoothScrollTo('infos')} className="relative group transition-all duration-300 ease-out hover:text-amber-100">
                                     <span>Infos</span>
                                     <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-amber-100 to-amber-200 transition-all duration-300 ease-out group-hover:w-full"></div>
                                 </button>
                             </nav>
-                            <a onClick={() => smoothScrollTo('contact')} className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-200 bg-gradient-to-r from-amber-700 to-amber-800 text-amber-50 transition-all duration-300 ease-out hover:shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:scale-105 font-medium">
+
+                            {/* Contact à droite (desktop only) */}
+                            <a onClick={() => smoothScrollTo('contact')} className="md:inline-flex hidden items-center gap-2 px-4 py-2 rounded-full border border-amber-200 bg-gradient-to-r from-amber-700 to-amber-800 text-amber-50 transition-all duration-300 ease-out hover:shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:scale-105 font-medium">
                                 <Mail className="w-4 h-4" /> Contact
                             </a>
+
+                            {/* Burger menu à droite (mobile only) */}
+                            <button
+                                className="md:hidden ml-4 p-2 rounded-lg border border-white/10 bg-white/10 text-white hover:bg-amber-700/80 transition-colors duration-150 z-30"
+                                onClick={() => setMenuOpen(true)}
+                                aria-label="Ouvrir le menu navigation"
+                            >
+                                <Menu className="w-7 h-7" />
+                            </button>
                         </div>
+
+                        {/* Overlay menu burger mobile */}
+                        {menuOpen && (
+
+                            <div className={`fixed inset-0 h-screen w-screen bg-black/95 backdrop-blur-sm z-[100] flex items-center justify-center transform transition-transform duration-500 ease-out ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+                            >
+                                {/* bouton fermer */}
+                                <div className="absolute top-6 right-6 z-[101]">
+                                    <button
+                                        onClick={() => setMenuOpen(false)}
+                                        aria-label="Fermer le menu navigation"
+                                        className="p-2 bg-white/10 rounded-full border border-white/10 text-white hover:bg-amber-700/80 transition-colors duration-150"
+                                    >
+                                        <X className="w-8 h-8" />
+                                    </button>
+                                </div>
+
+                                {/* navigation centrale */}
+                                <nav className="flex flex-col gap-8 items-center text-white text-2xl">
+                                    <button
+                                        onClick={() => {
+                                            smoothScrollTo('maison');
+                                            setMenuOpen(false);
+                                        }}
+                                        className="hover:text-amber-300"
+                                    >
+                                        La maison
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            smoothScrollTo('carte');
+                                            setMenuOpen(false);
+                                        }}
+                                        className="hover:text-amber-300"
+                                    >
+                                        Nos produits
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            smoothScrollTo('infos');
+                                            setMenuOpen(false);
+                                        }}
+                                        className="hover:text-amber-300"
+                                    >
+                                        Infos
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            smoothScrollTo('contact');
+                                            setMenuOpen(false);
+                                        }}
+                                        className="mt-6 bg-gradient-to-r from-amber-700 to-amber-800 px-6 py-2 rounded-full font-medium text-amber-50 hover:scale-105 transition-transform"
+                                    >
+                                        Contact
+                                    </button>
+                                </nav>
+                            </div>
+
+                        )}
+
                     </header>
 
                     {/* Hero - Centré verticalement dans l'espace restant */}
-                    <div className="flex-1 flex items-center justify-center relative z-10">
+                    <div className="flex-1 flex items-center justify-center relative z-[1]">
                         <div className="max-w-9xl mx-auto px-4 py-10 text-center">
                             <h1 className="text-4xl md:text-6xl text-white mb-3 text-shadow-lg font-extrabold tracking-tight">Blézy Boulangerie</h1>
                             <h2 className="text-4xl md:text-5xl text-amber-100 mb-4 text-shadow-lg font-light">Consequatur illo inventore repellendus animi!</h2>
@@ -178,38 +286,37 @@ export default function BoulangerieSite({ adminProducts }) {
                             <p className="text-white text-lg max-w-3xl mx-auto drop-shadow-md leading-relaxed">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem excepturi, impedit quas accusamus tempore quod numquam?
                             </p>
-                            <div className="mt-6 text-sm flex flex-wrap gap-6 justify-center text-white">
-                                <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full"><Clock className="w-4 h-4" /> Aujourd'hui : <strong className="ml-1 font-sans font-semibold">{hours[todayCap] ?? "—"}</strong></span>
-                                <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full"><MapPin className="w-4 h-4" /> Secteur Theizé / Val d'Oingt</span>
+                            {/* Les deux bulles 'Aujourd'hui' et 'Secteur' */}
+                            <div className="mt-6 text-sm flex flex-wrap gap-6 justify-center text-white hidden [@media(min-width:500px)]:flex">
+                                <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full">
+                                    <Clock className="w-4 h-4" /> Aujourd'hui : <strong className="ml-1 font-sans font-semibold">{hours[todayCap] ?? "—"}</strong>
+                                </span>
+                                <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full">
+                                    <MapPin className="w-4 h-4" /> Secteur Theizé / Val d'Oingt
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
 
             {/* Galerie d'images */}
-            <section className="bg-white border-t border-stone-200 font-playfair font-semibold tracking-wider">
+            < section className="bg-white border-t border-stone-200 font-playfair font-semibold tracking-wider" >
                 <div className="max-w-7xl mx-auto px-4 py-12">
                     <h2 className="text-3xl text-center mb-12 text-stone-800">Découvrez Blézy Boulangerie</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div className="group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02]">
-                            <div className="aspect-[4/3] overflow-hidden">
-                                <img src={facadeImg} alt="Façade de la boulangerie" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                            </div>
+                        <div className="group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02] aspect-[4/3]">
+                            <img src={facadeImg} alt="Façade de la boulangerie" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 rounded-2xl" />
                         </div>
-                        <div className="group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02]">
-                            <div className="aspect-[4/3] overflow-hidden">
-                                <img src={painImg} alt="Pain" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                            </div>
+                        <div className="group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02] aspect-[4/3]">
+                            <img src={painImg} alt="Pain artisanal" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 rounded-2xl" />
                         </div>
-                        <div className="group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02]">
-                            <div className="aspect-[4/3] overflow-hidden">
-                                <img src={patisserieImg} alt="Patisserie" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-                            </div>
+                        <div className="group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 ease-out hover:scale-[1.02] aspect-[4/3]">
+                            <img src={patisserieImg} alt="Pâtisserie maison" className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 rounded-2xl" />
                         </div>
                     </div>
                 </div>
-            </section>
+            </section >
 
             <Divider className="mb-12" />
 
@@ -297,9 +404,9 @@ export default function BoulangerieSite({ adminProducts }) {
                         <div
                             id="products-carousel"
                             className={`${produits.length <= 3
-                                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
+                                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
                                 : 'flex gap-8 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4'
-                                }`}
+                                } w-full py-6 md:py-10 box-border`}
                         >
                             {produits.map((c, index) => (
                                 <div
@@ -338,7 +445,7 @@ export default function BoulangerieSite({ adminProducts }) {
 
                         {/* Indicateurs de pagination (si plus de 3 catégories) */}
                         {produits.length > 3 && (
-                            <div className="flex justify-center mt-8 gap-3">
+                            <div className="justify-center mt-8 gap-3 hidden [@media(min-width:500px)]:flex">
                                 {Array.from({ length: Math.ceil(produits.length / 3) }, (_, i) => (
                                     <button
                                         key={i}
@@ -352,10 +459,10 @@ export default function BoulangerieSite({ adminProducts }) {
                 </div>
             </section>
 
-            <Divider className="mb-12" />
+            {/*<Divider className="mb-12" />*/}
 
             {/* Savoir-faire */}
-            <section id="savoirfaire" className="bg-white mb-12">
+            {/* <section id="savoirfaire" className="bg-white mb-12">
                 <div className="max-w-6xl mx-auto px-4">
                     <h2 className="font-serif text-3xl font-playfair font-semibold tracking-wider text-center text-stone-800 mb-12">Notre savoir-faire</h2>
 
@@ -394,12 +501,12 @@ export default function BoulangerieSite({ adminProducts }) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
-            <Divider className="mb-12" />
+            {/* <Divider className="mb-12" /> */}
 
             {/* Galerie finale */}
-            <section className="">
+            {/* <section className=""> 
                 <div className="max-w-6xl mx-auto px-4  mb-12">
                     <h2 className="font-serif text-3xl font-playfair font-semibold tracking-wider text-center text-stone-800 mb-12">L'ambiance Blézy</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -426,7 +533,7 @@ export default function BoulangerieSite({ adminProducts }) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section>*/}
 
             {/* Infos pratiques */}
             <section id="infos" className="bg-gradient-to-b from-stone-50 to-white border-t border-stone-200">
@@ -438,7 +545,7 @@ export default function BoulangerieSite({ adminProducts }) {
                             </div>
                             <div className="font-serif text-xl text-stone-800">Adresse</div>
                         </div>
-                        <p className="text-stone-700 leading-relaxed">Rue principale – 69620 Theizé / Val d'Oingt</p>
+                        <p className="text-stone-700 leading-relaxed">Pouilly-le-Monial • Porte des Pierre Dorées (69400)</p>
                     </div>
                     <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:scale-[1.02]">
                         <div className="flex items-center gap-3 mb-4">
@@ -448,7 +555,7 @@ export default function BoulangerieSite({ adminProducts }) {
                             <div className="font-serif text-xl text-stone-800">Contact</div>
                         </div>
                         <p className="text-stone-700 flex items-center gap-2 mb-2">04 00 00 00 00</p>
-                        <p className="text-stone-700 flex items-center gap-2">bonjour@pierresdorees.fr</p>
+                        <p className="text-stone-700 flex items-center gap-2">blezy.boulangerie@gmail.com</p>
                     </div>
 
                 </div>
@@ -486,6 +593,6 @@ export default function BoulangerieSite({ adminProducts }) {
                     </div>
                 </div>
             </footer>
-        </div>
+        </div >
     );
 }
