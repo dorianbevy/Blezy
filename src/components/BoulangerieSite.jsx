@@ -34,13 +34,13 @@ function Divider() {
 
 // Données des horaires
 const hours = {
-    Lundi: "Fermé",
-    Mardi: "7:00–13:00, 15:30–19:00",
-    Mercredi: "7:00–13:00, 15:30–19:00",
-    Jeudi: "7:00–13:00, 15:30–19:00",
-    Vendredi: "7:00–13:00, 15:30–19:00",
-    Samedi: "7:30–13:00, 15:00–18:00",
-    Dimanche: "7:30–12:30",
+    Lundi: "06:00–19:00",
+    Mardi: "06:00–19:00",
+    Mercredi: "06:00–19:00",
+    Jeudi: "06:00–19:00",
+    Vendredi: "06:00–19:00",
+    Samedi: "06:00–19:00",
+    Dimanche: "06:00–12:30",
 };
 
 // Données des produits par défaut (seront remplacées par les données admin)
@@ -88,6 +88,17 @@ export default function BoulangerieSite({ adminProducts }) {
     const todayCap = today.charAt(0).toUpperCase() + today.slice(1);
     const [currentSlide, setCurrentSlide] = React.useState(0);
     const [menuOpen, setMenuOpen] = React.useState(false);
+
+    // Bloquer le scroll de la page quand le menu burger est ouvert
+    React.useEffect(() => {
+        if (menuOpen) {
+            const previousOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = previousOverflow;
+            };
+        }
+    }, [menuOpen]);
 
     // Utiliser les produits admin s'ils sont disponibles, sinon les produits par défaut
     const produits = adminProducts || defaultProduits;
@@ -181,7 +192,7 @@ export default function BoulangerieSite({ adminProducts }) {
                                 <img src={logo2Img} alt="Blézy Boulangerie" className="w-14 h-14 object-cover" />
                                 <div>
                                     <div className="text-xl tracking-wide text-white font-bold">Blézy Boulangerie</div>
-                                    <div className="text-[12px] text-amber-100">Pouilly-le-Monial</div>
+                                    <div className="text-[12px] text-amber-100">Pouilly-le-Monial • Porte des Pierres Dorées</div>
                                 </div>
                             </div>
 
@@ -281,10 +292,10 @@ export default function BoulangerieSite({ adminProducts }) {
                     <div className="flex-1 flex items-center justify-center relative z-[1]">
                         <div className="max-w-9xl mx-auto px-4 py-10 text-center">
                             <h1 className="text-4xl md:text-6xl text-white mb-3 text-shadow-lg font-extrabold tracking-tight">Blézy Boulangerie</h1>
-                            <h2 className="text-4xl md:text-5xl text-amber-100 mb-4 text-shadow-lg font-light">Consequatur illo inventore repellendus animi!</h2>
+                            <h2 className="text-3xl md:text-4xl text-amber-100 mb-4 text-shadow-lg font-light">Pains au levain et viennoiseries maison, cuits chaque matin.</h2>
                             <Divider />
                             <p className="text-white text-lg max-w-3xl mx-auto drop-shadow-md leading-relaxed">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem excepturi, impedit quas accusamus tempore quod numquam?
+                                Des ingrédients nets, une fermentation maîtrisée, une production quotidienne.
                             </p>
                             {/* Les deux bulles 'Aujourd'hui' et 'Secteur' */}
                             <div className="mt-6 text-sm flex flex-wrap gap-6 justify-center text-white hidden [@media(min-width:500px)]:flex">
@@ -334,13 +345,15 @@ export default function BoulangerieSite({ adminProducts }) {
                                 <h3 className="text-lg font-semibold text-stone-800">Notre philosophie</h3>
                             </div>
                             <p className="text-stone-700 leading-relaxed mb-4">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat cupiditate sint accusantium quia.
+                                Blézy Boulangerie est une boulangerie artisanale centrée sur le travail du levain et des produits faits maison.
+                                Chaque jour, nous produisons pains, viennoiseries, brioches avec une méthode simple : farines choisies, levain naturel, gestes précis.
+                                Notre objectif : proposer des produits réguliers, francs et fabriqués sur place.
                             </p>
-                            <ul className="space-y-2 text-stone-700">
+                            {/*<ul className="space-y-2 text-stone-700">
                                 <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-amber-500"></div> Suibusdam numquam enim impedit.</li>
                                 <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-amber-500"></div> Suibusdam numquam enim.</li>
                                 <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-amber-500"></div> Quibusdam enim impedit.</li>
-                            </ul>
+                            </ul>*/}
                         </div>
 
                         {/* Image de l'atelier */}
