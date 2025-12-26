@@ -8,7 +8,9 @@
         "build": "vite build",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
-        "db": "json-server --watch db.json --port 3001"
+        "db": "json-server --watch db.json --port 3001",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d dist -r https://github.com/dorianbevy/Blezy.git"
     },
     "dependencies": {
         "lucide-react": "^0.263.1",
@@ -30,9 +32,5 @@
         "tailwindcss": "^3.3.3",
         "vite": "^4.5.14"
     },
-    "homepage": "https://dorianbevy.github.io/Blezy",
-    "scripts": {
-        "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist"
-    }
+    "homepage": "https://dorianbevy.github.io/Blezy"
 }
